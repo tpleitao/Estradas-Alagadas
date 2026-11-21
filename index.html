@@ -6,271 +6,275 @@
 <title>Estradas Alagadas · Málaga Edition</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Shrikhand&family=Yellowtail&family=Karla:wght@400;500;700&family=DM+Mono:wght@500&display=swap" rel="stylesheet">
 <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet">
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <style>
 :root {
-  /* Spanish motorway signage over real satellite: sign-blue panels, sodium-lamp route, wet-asphalt chrome */
-  --sign: #0b4ea2;
-  --sign-deep: #083a7a;
-  --paper: #f6f5ef;
-  --sodium: #ff9e1b;
-  --asphalt: #131518;
-  --wet: #2a3038;
-  --line: rgba(255,255,255,.18);
-  --display: "Big Shoulders Display", "Arial Narrow", Impact, sans-serif;
-  --body: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
-  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
-  color-scheme: dark;
+  /* 70s California road trip: sunset stripes over real satellite, sand paper cards, Pacific blue */
+  --sand: #fff3e0;
+  --ink: #2b1e16;
+  --sun: #f7b538;
+  --tang: #f26b38;
+  --rose: #e4576e;
+  --pacific: #1f7a8c;
+  --display: "Shrikhand", "Cooper Black", Georgia, serif;
+  --script: "Yellowtail", "Brush Script MT", cursive;
+  --body: "Karla", "Helvetica Neue", Arial, sans-serif;
+  --mono: "DM Mono", ui-monospace, Menlo, monospace;
+  --stripes: linear-gradient(var(--sun) 0 25%, var(--tang) 25% 50%, var(--rose) 50% 75%, var(--pacific) 75% 100%);
+  --stripes-h: linear-gradient(90deg, var(--sun) 0 25%, var(--tang) 25% 50%, var(--rose) 50% 75%, var(--pacific) 75% 100%);
+  color-scheme: light;
 }
 * { box-sizing: border-box; }
-html, body { height: 100%; margin: 0; background: var(--asphalt); color: var(--paper); font-family: var(--body); overflow: hidden; }
+html, body { height: 100%; margin: 0; background: #1b2a33; color: var(--ink); font-family: var(--body); overflow: hidden; }
 #map { position: absolute; inset: 0; }
-.maplibregl-ctrl-attrib { font-size: 10px; background: rgba(19,21,24,.7) !important; color: #cfd3d8; }
-.maplibregl-ctrl-attrib a { color: #fff; }
+.tint { position: absolute; inset: 0; pointer-events: none; z-index: 1;
+  background: linear-gradient(180deg, rgba(242,107,56,.28) 0%, rgba(247,181,56,0) 22%, rgba(31,122,140,0) 70%, rgba(43,30,22,.35) 100%); mix-blend-mode: multiply; }
+.maplibregl-ctrl-attrib { font-size: 10px; background: rgba(255,243,224,.8) !important; }
 
-/* top chrome */
-.top { position: absolute; top: 0; left: 0; right: 0; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; padding: 14px 16px 40px; background: linear-gradient(rgba(19,21,24,.85), rgba(19,21,24,0)); pointer-events: none; z-index: 5; }
-.brand { display: grid; gap: 4px; }
-.brand .sign { background: var(--sign); border: 3px solid var(--paper); border-radius: 6px; padding: 4px 12px 2px; font-family: var(--display); font-weight: 900; font-size: 26px; letter-spacing: .02em; line-height: 1; text-transform: uppercase; box-shadow: 0 2px 0 var(--sign-deep); }
-.brand .plate { justify-self: start; background: var(--sodium); color: var(--asphalt); font-family: var(--mono); font-weight: 600; font-size: 11px; letter-spacing: .14em; padding: 3px 8px; border-radius: 3px; white-space: nowrap; }
-.gauges { display: grid; gap: 6px; justify-items: end; }
-.gauge { background: rgba(19,21,24,.82); border: 1px solid var(--line); border-radius: 6px; padding: 5px 9px; font-family: var(--mono); font-size: 12px; font-variant-numeric: tabular-nums; display: flex; gap: 8px; align-items: baseline; }
-.gauge b { font-size: 17px; color: var(--sodium); font-weight: 600; letter-spacing: .04em; }
-.gauge span { color: #aab1ba; font-size: 10px; letter-spacing: .12em; }
+.top { position: absolute; top: 0; left: 0; right: 0; z-index: 5; display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; padding: 12px 14px; pointer-events: none; }
+.logo { pointer-events: auto; background: var(--sand); border-radius: 14px; padding: 6px 12px 4px 10px; display: flex; align-items: center; gap: 10px; box-shadow: 0 6px 18px rgba(43,30,22,.3); }
+.logo i { width: 10px; align-self: stretch; border-radius: 3px; background: var(--stripes); }
+.logo b { font-family: var(--display); font-weight: 400; font-size: 20px; line-height: 1; color: var(--ink); display: block; }
+.logo span { font-family: var(--script); font-size: 18px; color: var(--tang); line-height: 1; }
+.dash { display: grid; gap: 6px; justify-items: end; }
+.pill { background: var(--sand); border-radius: 999px; padding: 5px 11px; font-family: var(--mono); font-size: 12px; display: flex; gap: 7px; align-items: baseline; box-shadow: 0 4px 12px rgba(43,30,22,.25); font-variant-numeric: tabular-nums; }
+.pill b { color: var(--tang); font-size: 15px; font-weight: 500; }
+.pill small { color: #8a7562; font-size: 10px; letter-spacing: .08em; }
 
-/* day posts */
-.days { position: absolute; top: 100px; left: 16px; display: flex; gap: 6px; z-index: 5; flex-wrap: wrap; }
-.days button { font-family: var(--mono); font-weight: 600; font-size: 11px; letter-spacing: .1em; color: var(--paper); background: rgba(19,21,24,.8); border: 1px solid var(--line); border-radius: 4px; padding: 6px 8px; cursor: pointer; }
-.days button[aria-current="true"] { background: var(--paper); color: var(--asphalt); border-color: var(--paper); }
-.days button:focus-visible, .ctrl button:focus-visible, .start:focus-visible { outline: 2px solid var(--sodium); outline-offset: 2px; }
+.days { position: absolute; z-index: 5; left: 14px; top: 70px; display: flex; gap: 6px; flex-wrap: wrap; }
+.days button { font-family: var(--mono); font-size: 11px; letter-spacing: .06em; border: 0; border-radius: 999px; padding: 6px 10px; background: rgba(255,243,224,.88); color: var(--ink); cursor: pointer; }
+.days button[aria-current="true"] { background: var(--pacific); color: var(--sand); }
+button:focus-visible { outline: 3px solid var(--sun); outline-offset: 2px; }
 
-/* card */
-.card { position: absolute; z-index: 6; left: 12px; right: 12px; bottom: 12px; max-height: 58%; display: grid; grid-template-rows: auto 1fr auto; background: var(--paper); color: var(--asphalt); border-radius: 10px; overflow: hidden; box-shadow: 0 18px 50px rgba(0,0,0,.55); transition: transform .45s cubic-bezier(.2,.8,.2,1), opacity .3s; }
-.card.out { transform: translateY(30px); opacity: 0; }
-.photo { position: relative; aspect-ratio: 16/8.5; background: repeating-linear-gradient(135deg, #1e2329 0 14px, #262c33 14px 28px); overflow: hidden; }
-.photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .6s; transform: scale(1.06); }
-.photo img.on { opacity: 1; animation: kb 12s ease-out forwards; }
-@keyframes kb { from { transform: scale(1.06) translateX(0); } to { transform: scale(1.14) translateX(-2%); } }
-.photo .fallback { position: absolute; inset: 0; display: grid; place-items: center; font-family: var(--display); font-weight: 800; font-size: 28px; color: #8b95a1; text-transform: uppercase; letter-spacing: .04em; }
-.photo .credit { position: absolute; left: 0; right: 0; bottom: 0; padding: 14px 10px 6px; font-size: 10px; color: #e9ecef; background: linear-gradient(transparent, rgba(0,0,0,.7)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.photo .credit a { color: #fff; }
-.photo .note { position: absolute; right: 8px; top: 8px; font-family: var(--mono); font-size: 10px; letter-spacing: .08em; background: rgba(19,21,24,.75); color: #e9ecef; padding: 3px 6px; border-radius: 3px; text-transform: uppercase; }
-.exit { position: absolute; left: 10px; top: 10px; display: flex; align-items: stretch; border: 2.5px solid var(--paper); border-radius: 6px; overflow: hidden; box-shadow: 0 3px 10px rgba(0,0,0,.4); }
-.exit .t { background: var(--sodium); color: var(--asphalt); font-family: var(--mono); font-weight: 600; font-size: 22px; padding: 4px 10px; font-variant-numeric: tabular-nums; }
-.exit .z { background: var(--sign); color: var(--paper); font-family: var(--mono); font-weight: 600; font-size: 11px; padding: 0 8px; display: grid; place-items: center; letter-spacing: .1em; }
-.body { padding: 12px 16px 6px; overflow: auto; }
-.kicker { font-family: var(--mono); font-size: 11px; letter-spacing: .12em; color: var(--sign); font-weight: 600; text-transform: uppercase; }
-.body h2 { font-family: var(--display); font-weight: 900; font-size: clamp(30px, 8vw, 44px); line-height: .95; margin: 4px 0 6px; text-transform: uppercase; letter-spacing: .01em; text-wrap: balance; }
-.body p { margin: 0 0 8px; font-size: 15px; line-height: 1.4; color: #3b4048; max-width: 60ch; }
-.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
-.tags span { font-family: var(--mono); font-size: 11px; border: 1.5px solid var(--asphalt); border-radius: 3px; padding: 2px 6px; text-transform: uppercase; letter-spacing: .06em; }
-.ctrl { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 10px; background: var(--asphalt); color: var(--paper); }
-.ctrl button { font-family: var(--mono); font-weight: 600; font-size: 12px; letter-spacing: .08em; background: var(--wet); color: var(--paper); border: 0; border-radius: 4px; padding: 9px 12px; cursor: pointer; }
-.ctrl button.play { background: var(--sodium); color: var(--asphalt); min-width: 92px; }
-.ctrl .count { font-family: var(--mono); font-size: 12px; color: #aab1ba; font-variant-numeric: tabular-nums; }
+.ticker { position: absolute; z-index: 5; left: 50%; bottom: 22px; transform: translateX(-50%); display: flex; align-items: center; gap: 8px; background: var(--ink); color: var(--sand); border-radius: 999px; padding: 7px 7px 7px 16px; box-shadow: 0 8px 24px rgba(0,0,0,.35); max-width: calc(100% - 28px); transition: opacity .3s, transform .3s; }
+.ticker.hide { opacity: 0; transform: translate(-50%, 12px); pointer-events: none; }
+.ticker .to { font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ticker .to em { font-style: normal; color: var(--sun); font-family: var(--mono); font-size: 12px; margin-right: 6px; }
+.ticker button { border: 0; border-radius: 999px; font-family: var(--mono); font-size: 12px; padding: 8px 12px; cursor: pointer; background: var(--sun); color: var(--ink); white-space: nowrap; }
+.ticker button.ghost { background: rgba(255,243,224,.16); color: var(--sand); }
 
-/* budget */
-.ledger { display: grid; gap: 6px; margin: 6px 0 10px; }
-.ledger div { display: grid; grid-template-columns: 1fr auto; gap: 8px; font-size: 14px; border-bottom: 1px dashed #c9c6bb; padding-bottom: 5px; }
-.ledger b { font-family: var(--mono); font-variant-numeric: tabular-nums; font-weight: 600; }
-.total { display: flex; justify-content: space-between; align-items: baseline; background: var(--sign); color: var(--paper); border-radius: 6px; padding: 8px 12px; border: 3px solid var(--paper); outline: 2px solid var(--sign); }
-.total strong { font-family: var(--display); font-size: 40px; font-weight: 900; }
-.small { font-size: 12px !important; color: #5a6069 !important; }
-.todo { margin: 10px 0 4px; padding-left: 18px; font-size: 14px; line-height: 1.5; }
+.card { position: absolute; z-index: 6; left: 10px; right: 10px; bottom: 10px; max-height: 54%; display: flex; flex-direction: column; background: var(--sand); border-radius: 18px; overflow: hidden; box-shadow: 0 18px 50px rgba(43,30,22,.45); transition: transform .5s cubic-bezier(.2,.8,.2,1), opacity .35s; }
+.card::before { content: ""; height: 8px; flex: none; background: var(--stripes-h); }
+.card.hide { transform: translateY(110%); opacity: 0; pointer-events: none; }
+.gallery { position: relative; flex: none; height: 28vh; max-height: 240px; min-height: 140px; background: #e9dcc6; overflow: hidden; touch-action: pan-y; }
+.gallery img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .8s; }
+.gallery img.on { opacity: 1; }
+.gallery .empty { position: absolute; inset: 0; display: grid; place-items: center; font-family: var(--display); font-size: 26px; color: #c7b291; text-align: center; padding: 0 20px; }
+.gallery .dots { position: absolute; left: 0; right: 0; bottom: 8px; display: flex; justify-content: center; gap: 6px; }
+.gallery .dots button { width: 8px; height: 8px; padding: 0; border-radius: 50%; border: 0; background: rgba(255,243,224,.65); cursor: pointer; }
+.gallery .dots button.on { background: var(--sun); width: 20px; border-radius: 4px; }
+.gallery .credit { position: absolute; left: 10px; right: 10px; bottom: 22px; font-size: 10px; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,.8); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.gallery .credit a { color: #fff; }
+.gallery .note { position: absolute; right: 10px; top: 10px; font-family: var(--mono); font-size: 10px; background: rgba(43,30,22,.7); color: var(--sand); border-radius: 999px; padding: 3px 8px; }
+.gallery .nav { position: absolute; top: 50%; transform: translateY(-50%); width: 34px; height: 34px; border-radius: 50%; border: 0; background: rgba(255,243,224,.88); color: var(--ink); font-size: 18px; cursor: pointer; }
+.gallery .nav.l { left: 8px; } .gallery .nav.r { right: 8px; }
+.time { position: absolute; left: 10px; top: 10px; background: var(--sun); color: var(--ink); font-family: var(--mono); font-size: 18px; padding: 4px 10px; border-radius: 999px; box-shadow: 0 3px 10px rgba(0,0,0,.3); }
+.time small { font-size: 10px; margin-left: 4px; opacity: .75; }
+.body { padding: 12px 16px 4px; overflow: auto; }
+.kick { font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--pacific); }
+.body h2 { font-family: var(--display); font-weight: 400; font-size: clamp(26px, 7.5vw, 38px); line-height: 1.02; margin: 4px 0 6px; color: var(--ink); text-wrap: balance; }
+.body p { margin: 0 0 8px; font-size: 15px; line-height: 1.45; max-width: 60ch; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 2px 0 8px; }
+.tags span { font-size: 12px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: #f6e2c4; color: var(--ink); }
+.foot { flex: none; display: flex; align-items: center; justify-content: space-between; gap: 6px; padding: 8px 10px; border-top: 1px solid #ecdcc2; }
+.foot button { border: 0; border-radius: 999px; font-family: var(--mono); font-size: 12px; padding: 9px 12px; cursor: pointer; background: #f1dfc2; color: var(--ink); }
+.foot .go { background: var(--tang); color: #fff; }
+.foot .count { font-family: var(--mono); font-size: 12px; color: #8a7562; }
 
-/* markers */
-.mk { width: 26px; height: 26px; border-radius: 5px; background: var(--sign); border: 2.5px solid var(--paper); color: var(--paper); font-family: var(--mono); font-weight: 600; font-size: 11px; display: grid; place-items: center; box-shadow: 0 2px 8px rgba(0,0,0,.5); cursor: pointer; transition: transform .3s, background .3s; }
-.mk.on { background: var(--sodium); color: var(--asphalt); transform: scale(1.35); }
-.mk.home { background: var(--paper); color: var(--sign); }
+.ledger { display: grid; gap: 6px; margin: 4px 0 10px; }
+.ledger div { display: flex; justify-content: space-between; gap: 10px; font-size: 14px; padding-bottom: 5px; border-bottom: 1px dotted #d9c3a0; }
+.ledger b { font-family: var(--mono); font-weight: 500; font-variant-numeric: tabular-nums; }
+.total { display: flex; justify-content: space-between; align-items: center; border-radius: 14px; padding: 10px 14px; color: var(--sand); background: var(--pacific); }
+.total strong { font-family: var(--display); font-weight: 400; font-size: 34px; }
+.small { font-size: 12px !important; color: #7a6552; }
+.todo { margin: 6px 0 8px; padding-left: 18px; font-size: 14px; line-height: 1.5; }
 
-/* start screen */
-.intro { position: absolute; inset: 0; z-index: 10; display: grid; align-content: end; gap: 14px; padding: 24px 20px 40px; background: linear-gradient(rgba(19,21,24,.1), rgba(19,21,24,.92) 70%); }
-.intro .big { font-family: var(--display); font-weight: 900; text-transform: uppercase; font-size: clamp(52px, 15vw, 120px); line-height: .82; letter-spacing: .005em; margin: 0; text-wrap: balance; }
-.intro .big em { font-style: normal; color: var(--sodium); }
-.intro .row { display: flex; flex-wrap: wrap; gap: 8px; }
-.intro .row span { font-family: var(--mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; border: 1px solid var(--line); padding: 5px 8px; border-radius: 4px; background: rgba(19,21,24,.6); }
-.intro p { margin: 0; max-width: 46ch; color: #c9ced4; font-size: 15px; line-height: 1.45; }
-.start { justify-self: start; font-family: var(--display); font-weight: 900; font-size: 26px; text-transform: uppercase; letter-spacing: .03em; background: var(--sodium); color: var(--asphalt); border: 3px solid var(--paper); border-radius: 8px; padding: 10px 22px; cursor: pointer; }
-.warn { border-left: 4px solid var(--sodium); background: rgba(19,21,24,.8); padding: 8px 12px; border-radius: 4px; font-size: 14px !important; color: var(--paper) !important; }
-body.nomap { background: radial-gradient(120% 80% at 30% 20%, #23415f 0%, #131518 60%); }
-body.nomap .days { top: 100px; }
-.intro.gone { opacity: 0; pointer-events: none; transition: opacity .6s; }
+.mk { width: 24px; height: 24px; border-radius: 50%; border: 3px solid var(--sand); background: var(--pacific); color: var(--sand); font-family: var(--mono); font-size: 10px; display: grid; place-items: center; box-shadow: 0 2px 8px rgba(0,0,0,.45); cursor: pointer; padding: 0; transition: transform .3s, background .3s; }
+.mk.on { background: var(--tang); transform: scale(1.4); }
+.mk.home { background: var(--sun); color: var(--ink); width: 30px; height: 30px; }
+
+.intro { position: absolute; inset: 0; z-index: 10; display: grid; align-content: end; padding: 24px 20px 34px; gap: 14px;
+  background: linear-gradient(180deg, rgba(247,181,56,0) 0%, rgba(242,107,56,.35) 35%, rgba(228,87,110,.75) 62%, rgba(31,58,74,.96) 100%); }
+.intro .sunset { position: absolute; left: 50%; top: 12%; width: min(66vw, 340px); aspect-ratio: 1; transform: translateX(-50%); border-radius: 50%;
+  background: linear-gradient(var(--sun), var(--tang) 70%, var(--rose));
+  -webkit-mask: linear-gradient(#000 0 56%, transparent 56% 61%, #000 61% 68%, transparent 68% 72%, #000 72% 78%, transparent 78% 81%, #000 81% 85%, transparent 85%);
+          mask: linear-gradient(#000 0 56%, transparent 56% 61%, #000 61% 68%, transparent 68% 72%, #000 72% 78%, transparent 78% 81%, #000 81% 85%, transparent 85%); }
+.intro h1 { margin: 0; font-family: var(--display); font-weight: 400; color: var(--sand); font-size: clamp(48px, 14vw, 104px); line-height: .92; text-shadow: 3px 3px 0 var(--rose), 6px 6px 0 var(--pacific); text-wrap: balance; }
+.intro .ed { font-family: var(--script); color: var(--sun); font-size: clamp(34px, 9vw, 64px); line-height: 1; margin-top: 2px; }
+.intro .meta { display: flex; flex-wrap: wrap; gap: 6px; }
+.intro .meta span { background: rgba(255,243,224,.92); color: var(--ink); border-radius: 999px; padding: 5px 11px; font-family: var(--mono); font-size: 12px; }
+.intro p { margin: 0; color: var(--sand); max-width: 44ch; font-size: 15px; line-height: 1.45; }
+.start { justify-self: start; border: 0; border-radius: 999px; background: var(--sun); color: var(--ink); font-family: var(--display); font-size: 24px; padding: 12px 28px 10px; cursor: pointer; box-shadow: 4px 4px 0 var(--rose); }
+.warn { background: rgba(255,243,224,.95); color: var(--ink) !important; border-radius: 12px; padding: 8px 12px; }
+.intro.gone { opacity: 0; pointer-events: none; transition: opacity .7s; }
+body.nomap { background: linear-gradient(180deg, #f7b538, #f26b38 45%, #1f3a4a); }
 
 @media (min-width: 900px) {
-  .card { left: auto; right: 20px; top: 20px; bottom: 20px; width: 430px; max-height: none; }
-  .photo { aspect-ratio: 4/3; }
-  .top { right: 470px; }
+  .card { left: auto; right: 20px; top: 20px; bottom: 20px; width: 420px; max-height: none; }
+  .gallery { height: 300px; max-height: none; }
   .intro { padding: 60px; }
 }
-@media (prefers-reduced-motion: reduce) {
-  .photo img.on { animation: none; }
-  .card, .photo img { transition: none; }
-}
+@media (prefers-reduced-motion: reduce) { .card, .gallery img, .ticker { transition: none; } }
 </style>
 </head>
 <body>
 <div id="map" aria-label="Mapa de satélite da viagem"></div>
+<div class="tint"></div>
 
 <header class="top">
-  <div class="brand">
-    <div class="sign">Estradas Alagadas</div>
-    <div class="plate">MÁLAGA EDITION · JUN 2027</div>
-  </div>
-  <div class="gauges">
-    <div class="gauge"><span>ODÓMETRO</span><b id="odo">0000</b>km</div>
-    <div class="gauge"><span id="clockDay">SEX 25</span><b id="clock">09:00</b><span id="tz">PT</span></div>
+  <div class="logo"><i></i><div><b>Estradas Alagadas</b><span>Málaga Edition</span></div></div>
+  <div class="dash">
+    <div class="pill"><small>KM</small><b id="odo">0000</b></div>
+    <div class="pill"><small id="clockDay">SEX 25</small><b id="clock">09:00</b><small id="tz">PT</small></div>
   </div>
 </header>
-
 <nav class="days" id="days" aria-label="Dias"></nav>
 
-<section class="card out" id="card" aria-live="polite">
-  <div class="photo" id="photo">
-    <div class="fallback" id="fallback"></div>
-    <img id="img" alt="">
-    <div class="exit" id="exit"><div class="t" id="exitT">09:00</div><div class="z" id="exitZ">PT</div></div>
+<div class="ticker hide" id="ticker">
+  <div class="to" id="tickerTo"></div>
+  <button id="tPlay" type="button" aria-label="Pausa">❚❚</button>
+  <button id="tCard" class="ghost" type="button" hidden>Ver paragem</button>
+</div>
+
+<section class="card hide" id="card" aria-live="polite">
+  <div class="gallery" id="gallery">
+    <div class="empty" id="empty"></div>
+    <div class="time" id="time">09:00<small>PT</small></div>
     <div class="note" id="note" hidden></div>
+    <button class="nav l" id="gPrev" type="button" aria-label="Foto anterior">‹</button>
+    <button class="nav r" id="gNext" type="button" aria-label="Foto seguinte">›</button>
     <div class="credit" id="credit"></div>
+    <div class="dots" id="dots"></div>
   </div>
   <div class="body" id="body"></div>
-  <div class="ctrl">
-    <button id="prev" type="button" aria-label="Paragem anterior">◀ ANT</button>
-    <span class="count" id="count">01 / 20</span>
-    <button id="play" class="play" type="button">▶ PLAY</button>
-    <button id="next" type="button" aria-label="Paragem seguinte">SEG ▶</button>
+  <div class="foot">
+    <button id="prev" type="button">‹ Anterior</button>
+    <button id="hideCard" type="button">Ver mapa</button>
+    <span class="count" id="count">01/20</span>
+    <button id="next" class="go" type="button">Seguinte ›</button>
   </div>
 </section>
 
 <section class="intro" id="intro">
-  <div class="row"><span>25 → 28 JUNHO 2027</span><span>6 amigos</span><span>1 carro grande ou 2</span><span>≈ 1.400 km</span></div>
-  <h1 class="big">Estradas<br>Alagadas<br><em>Málaga Edition</em></h1>
-  <p>Lisboa, Sevilha, Málaga e Torremolinos: rooftops, praia, pôr do sol, mesa e noite. Carrega em arrancar e a viagem faz-se sozinha pelo satélite. Também podes saltar entre paragens.</p>
-  <p class="warn" id="warn" hidden>O mapa de satélite não arranca neste visualizador. O roteiro, as fotos e o orçamento funcionam na mesma. Para ver o voo, abre o ficheiro no Chrome ou no Safari do computador.</p>
-  <button class="start" id="start" type="button">Arrancar ▸</button>
+  <div class="sunset" aria-hidden="true"></div>
+  <div class="meta"><span>25–28 junho 2027</span><span>6 amigos</span><span>≈ 1.400 km</span><span>3 noites</span></div>
+  <div>
+    <h1>Estradas Alagadas</h1>
+    <div class="ed">Málaga Edition</div>
+  </div>
+  <p>Sevilha, Málaga e Torremolinos: rooftops, praia, pôr do sol, mesa e noite. Carrega em arrancar e a viagem faz-se sozinha pelo satélite. Em cada destino o mapa pára e só depois aparecem as fotos do sítio.</p>
+  <p class="warn" id="warn" hidden>O mapa de satélite não arranca neste visualizador. O roteiro, as fotos e o orçamento funcionam na mesma.</p>
+  <button class="start" id="start" type="button">Arrancar</button>
 </section>
 
 <script>
 const S = {
-  lisboa: [-9.1393, 38.7223], mercer: [-5.9985, 37.3878], eme: [-5.9930, 37.3866], eterno: [-5.9935, 37.3895],
-  alameda: [-5.9945, 37.3990], atarazanas: [-4.4237, 36.7190], me: [-4.4160, 36.7226], kaleja: [-4.4183, 36.7213],
+  lisboa: [-9.1393, 38.7223], mercer: [-5.9985, 37.3878], eme: [-5.9930, 37.3866], azotea: [-5.9963, 37.3968],
+  alameda: [-5.9945, 37.3990], atarazanas: [-4.4237, 36.7190], me: [-4.4160, 36.7226], alita: [-4.4212, 36.7183],
   gold: [-4.4222, 36.7232], palapa: [-4.4715, 36.6405], horno: [-4.4950, 36.6235], carihuela: [-4.5065, 36.6140],
-  onlyyou: [-4.4222, 36.7185], malagueta: [-4.4085, 36.7190]
+  onlyyou: [-4.4228, 36.7189], malagueta: [-4.4085, 36.7190]
 };
-// fallback road polylines if the routing service is unavailable
 const FB = {
   L1: [[-9.139,38.722],[-9.10,38.60],[-8.75,38.40],[-8.35,38.0],[-8.10,37.6],[-7.70,37.25],[-7.40,37.22],[-6.95,37.27],[-6.45,37.35],[-6.10,37.385],[-5.9985,37.3878]],
   L2: [[-5.9985,37.3878],[-5.95,37.37],[-5.70,37.30],[-5.30,37.25],[-4.90,37.17],[-4.56,37.02],[-4.48,36.90],[-4.44,36.78],[-4.43,36.735],[-4.4237,36.719]],
   L3: [[-4.416,36.7226],[-4.425,36.715],[-4.44,36.70],[-4.452,36.675],[-4.465,36.655],[-4.4715,36.6405]],
-  L4: [[-4.5065,36.614],[-4.49,36.625],[-4.465,36.655],[-4.452,36.675],[-4.44,36.70],[-4.4222,36.7185]],
+  L4: [[-4.5065,36.614],[-4.49,36.625],[-4.465,36.655],[-4.452,36.675],[-4.44,36.70],[-4.4228,36.7189]],
 };
 FB.L5 = [[-4.416,36.7226]].concat(FB.L2.slice().reverse().slice(1), FB.L1.slice().reverse().slice(1));
 
 const STEPS = [
-  { kind: "drive", leg: "L1", from: "lisboa", to: "mercer", day: 0, time: "09:00", tz: "PT", title: "Lisboa → Sevilha",
-    text: "Saída às 09:00 de Lisboa. Cerca de 4h30 de estrada pelo Alentejo e Algarve, mais uma paragem. Em Espanha ganha-se uma hora no relógio: chegada perto das 15:00, hora local.",
-    tags: ["≈ 460 km", "4h30 + paragem", "+1h em Espanha"], q: ["Ponte Vasco da Gama", "Ponte 25 de Abril Lisboa"], note: "a partida" },
+  { kind: "drive", leg: "L1", from: "lisboa", to: "mercer", day: 0, time: "09:00", tz: "PT", title: "Lisboa → Sevilha", kicker: "Estrada",
+    text: "Saída às 09:00. Cerca de 4h30 pelo Alentejo e Algarve, mais uma paragem. Em Espanha o relógio adianta uma hora, por isso chegam a Sevilha perto das 15:00, hora local.",
+    tags: ["≈ 460 km", "4h30 + paragem", "+1h em Espanha"], q: ["Ponte Vasco da Gama", "Ponte 25 de Abril Lisboa", "Alentejo paisagem"], note: "a partida" },
   { kind: "stop", id: "mercer", day: 0, time: "15:00", tz: "ES", title: "Mercer Sevilla", kicker: "Check-in · El Arenal",
-    text: "Hotel boutique de 12 quartos num palácio restaurado. A tarde é na piscina do rooftop, que tem um bar muito procurado.",
-    tags: ["rooftop pool", "boutique", "1 noite"], q: ["Hotel Mercer Sevilla", "Calle Castelar Sevilla", "Arenal Sevilla"], note: "zona do hotel" },
-  { kind: "stop", id: "eme", day: 0, time: "21:50", tz: "ES", title: "Terraza EME", kicker: "Pôr do sol",
-    text: "Ático virado à Catedral e à Giralda. Chegar antes das 21:30 para apanhar a luz a descer sobre a torre.",
-    tags: ["sunset", "cocktails", "Giralda"], q: ["Giralda atardecer", "Giralda sunset", "Giralda Sevilla"], note: "a vista" },
-  { kind: "stop", id: "eterno", day: 0, time: "22:30", tz: "ES", title: "Eterno", kicker: "Jantar · Casco Antiguo",
-    text: "Cozinha andaluza do chef José Luis Pastrana, agora no centro. Menu de degustação de 8 pratos ou à carta.",
-    tags: ["jantar", "degustação", "reservar"], q: ["Barrio Santa Cruz Sevilla noche", "Catedral de Sevilla noche"], note: "o bairro" },
+    text: "Hotel boutique de 12 quartos num palácio restaurado. A tarde é na piscina do rooftop, com o bar ao lado.",
+    tags: ["rooftop pool", "boutique", "1 noite"], q: ["Hotel Mercer Sevilla", "El Arenal Sevilla", "Real Maestranza Sevilla", "Torre del Oro"], note: "a zona" },
+  { kind: "stop", id: "eme", day: 0, time: "21:15", tz: "ES", title: "Terraza EME", kicker: "Pôr do sol às ~21:50",
+    text: "Ático virado à Catedral e à Giralda. Primeiro copo com a luz a descer sobre a torre.",
+    tags: ["sunset", "cocktails", "Giralda"], q: ["Giralda atardecer", "Giralda sunset", "Catedral de Sevilla Giralda", "Giralda"], note: "a vista" },
+  { kind: "stop", id: "azotea", day: 0, time: "22:45", tz: "ES", title: "La Azotea", kicker: "Jantar · San Lorenzo",
+    text: "Pioneira das tapas modernas em Sevilha, com ambiente animado e preço justo. Fica a cinco minutos da Alameda, por isso a noite continua a pé.",
+    tags: ["tapas modernas", "boa vibe", "perto da movida"], q: ["Plaza de San Lorenzo Sevilla", "San Lorenzo Sevilla", "tapas Sevilla"], note: "o bairro" },
   { kind: "stop", id: "alameda", day: 0, time: "00:30", tz: "ES", title: "Alameda de Hércules", kicker: "Copas",
-    text: "Praça comprida entre as duas colunas romanas, cheia de esplanadas e bares até tarde. É aqui que Sevilha sai à noite.",
-    tags: ["copas", "esplanadas", "noite"], q: ["Alameda de Hércules", "Alameda de Hercules Sevilla"], note: "" },
-  { kind: "drive", leg: "L2", from: "mercer", to: "atarazanas", day: 1, time: "11:00", tz: "ES", title: "Sevilha → Málaga",
+    text: "Praça comprida entre colunas romanas, cheia de esplanadas e bares. É aqui que Sevilha sai à noite.",
+    tags: ["copas", "esplanadas", "noite"], q: ["Alameda de Hércules", "Alameda de Hercules Sevilla", "Alameda de Hércules noche"], note: "" },
+  { kind: "drive", leg: "L2", from: "mercer", to: "atarazanas", day: 1, time: "11:00", tz: "ES", title: "Sevilha → Málaga", kicker: "Estrada",
     text: "Pequeno-almoço sem pressa e estrada pela A-92, passando por Antequera. Chegada a Málaga a tempo do aperitivo.",
-    tags: ["≈ 210 km", "2h30", "A-92"], q: ["Peña de los Enamorados Antequera", "Antequera"], note: "a caminho" },
+    tags: ["≈ 210 km", "2h30", "A-92"], q: ["Peña de los Enamorados", "Antequera", "Torcal de Antequera"], note: "a caminho" },
   { kind: "stop", id: "atarazanas", day: 1, time: "13:30", tz: "ES", title: "Mercado de Atarazanas", kicker: "Aperitivo",
-    text: "Mercado do século XIX com um vitral enorme na fachada. Ao balcão: vermute, pescaíto frito e gambas.",
-    tags: ["vermute", "tapas", "mercado"], q: ["Mercado de Atarazanas Málaga", "Mercado Central de Atarazanas"], note: "" },
+    text: "Mercado do século XIX com um vitral enorme. Ao balcão: vermute, pescaíto frito e gambas.",
+    tags: ["vermute", "tapas", "mercado"], q: ["Mercado de Atarazanas", "Mercado Central de Atarazanas Málaga", "Atarazanas vidriera"], note: "" },
   { kind: "stop", id: "me", day: 1, time: "16:30", tz: "ES", title: "ME Málaga", kicker: "Check-in · spa",
-    text: "Hotel novo ao lado da Plaza de la Merced: spa, e piscina infinita aquecida no rooftop com vista para a Alcazaba e o mar. Peçam quartos com vista mar.",
-    tags: ["spa", "infinity pool", "2 noites"], q: ["Plaza de la Merced Málaga", "Alcazaba Málaga"], note: "zona do hotel" },
-  { kind: "stop", id: "kaleja", day: 1, time: "20:30", tz: "ES", title: "Kaleja", kicker: "Jantar · estrela Michelin",
-    text: "Dani Carnero cozinha nas brasas, na antiga judiaria, junto ao Museu Picasso. Só abre de terça a sábado e convém reservar com semanas de antecedência.",
-    tags: ["Michelin", "brasas", "reservar já"], q: ["Museo Picasso Málaga calle", "Judería Málaga", "Calle Granada Málaga"], note: "a rua" },
-  { kind: "stop", id: "me", alias: "me2", day: 1, time: "23:30", tz: "ES", title: "Cañitas al Fresco", kicker: "Rooftop do ME",
-    text: "De volta ao hotel para copas no rooftop com a Catedral e o porto iluminados.",
-    tags: ["rooftop", "cocktails"], q: ["Catedral de Málaga noche", "Málaga noche catedral", "Alcazaba Málaga noche"], note: "a vista" },
-  { kind: "stop", id: "gold", day: 1, time: "01:00", tz: "ES", title: "Sala Gold", kicker: "Dançar",
-    text: "Discoteca no centro com reservados e ambiente mais cuidado. Para fechar a noite de sábado.",
-    tags: ["discoteca", "reservados"], q: ["Plaza de Uncibay Málaga", "Málaga centro noche"], note: "a zona" },
-  { kind: "drive", leg: "L3", from: "me", to: "palapa", day: 2, time: "10:30", tz: "ES", title: "Málaga → Torremolinos",
+    text: "Hotel novo ao lado da Plaza de la Merced, com spa e piscina infinita aquecida no rooftop. Peçam quartos com vista mar.",
+    tags: ["spa", "infinity pool", "2 noites"], q: ["Plaza de la Merced Málaga", "Alcazaba de Málaga", "Teatro Romano Málaga"], note: "a zona" },
+  { kind: "stop", id: "me", day: 1, time: "21:00", tz: "ES", title: "Cañitas al Fresco", kicker: "Pôr do sol no rooftop do ME",
+    text: "Cocktails na piscina do rooftop enquanto o sol se põe sobre a Alcazaba e o porto, por volta das 21:40.",
+    tags: ["sunset", "rooftop", "cocktails"], q: ["Alcazaba Málaga atardecer", "Málaga atardecer catedral", "Málaga sunset"], note: "a vista" },
+  { kind: "stop", id: "alita", day: 1, time: "22:15", tz: "ES", title: "Alita Soho", kicker: "Jantar · Soho",
+    text: "Clássicos com um toque diferente, terraço, barra animada e uma sala com muito encanto, por 30 a 40 € por pessoa. Alternativa com mais cocktails: Cantina Canalla, na mesma rua.",
+    tags: ["trendy", "terraço", "30–40 €"], q: ["Soho Málaga", "Soho Málaga arte urbano", "Málaga Soho street art"], note: "o bairro" },
+  { kind: "stop", id: "gold", day: 1, time: "00:30", tz: "ES", title: "Sala Gold", kicker: "Dançar",
+    text: "Discoteca no centro, com reservados. Fica na zona de Uncibay e Calle Granada, onde está a movida de sábado.",
+    tags: ["discoteca", "reservados", "movida"], q: ["Plaza de Uncibay", "Calle Granada Málaga", "Málaga centro noche"], note: "a zona" },
+  { kind: "drive", leg: "L3", from: "me", to: "palapa", day: 2, time: "10:30", tz: "ES", title: "Málaga → Torremolinos", kicker: "Estrada",
     text: "Vinte minutos pela costa até à praia de Los Álamos. O dia é de praia.",
-    tags: ["≈ 15 km", "20 min"], q: ["Torremolinos playa", "Torremolinos"], note: "" },
+    tags: ["≈ 15 km", "20 min"], q: ["Torremolinos playa", "Torremolinos", "Costa del Sol playa"], note: "" },
   { kind: "stop", id: "palapa", day: 2, time: "11:00", tz: "ES", title: "La Palapa Beach Jazba", kicker: "Beach club",
-    text: "Camas balinesas, baloiços e palmeiras na primeira linha de Los Álamos, com cozinha mediterrânica e asiática. Reservem as camas.",
-    tags: ["camas balinesas", "almoço", "reservar"], q: ["Playa de Los Álamos Torremolinos", "Los Álamos Torremolinos"], note: "a praia" },
+    text: "Camas balinesas, baloiços e palmeiras na primeira linha de Los Álamos. Reservem as camas e fiquem para almoçar.",
+    tags: ["camas balinesas", "almoço", "reservar"], q: ["Playa de Los Álamos", "Los Álamos Torremolinos", "Torremolinos beach"], note: "a praia" },
   { kind: "stop", id: "horno", day: 2, time: "17:00", tz: "ES", title: "Horno Beach", kicker: "Tardeo",
     text: "Um dos beach clubs mais antigos de Torremolinos, conhecido pelo tardeo: cocktails de fruta natural e música ao fim da tarde.",
-    tags: ["tardeo", "cocktails"], q: ["Playa del Bajondillo", "Bajondillo Torremolinos"], note: "a praia" },
-  { kind: "stop", id: "carihuela", day: 2, time: "21:40", tz: "ES", title: "La Carihuela", kicker: "Pôr do sol + espetos",
-    text: "Antigo bairro de pescadores. Sardinhas no espeto assadas em barcos com brasas, com os pés na areia enquanto o sol se põe.",
-    tags: ["sunset", "espetos"], q: ["La Carihuela Torremolinos", "Espeto de sardinas"], note: "" },
-  { kind: "drive", leg: "L4", from: "carihuela", to: "onlyyou", day: 2, time: "23:10", tz: "ES", title: "De volta a Málaga",
-    text: "Táxi de regresso ao centro para o último copo.", tags: ["≈ 15 km", "táxi"], q: ["Puerto de Málaga noche", "Muelle Uno Málaga"], note: "" },
+    tags: ["tardeo", "cocktails"], q: ["Playa del Bajondillo", "Bajondillo Torremolinos", "Torremolinos paseo marítimo"], note: "a praia" },
+  { kind: "stop", id: "carihuela", day: 2, time: "21:15", tz: "ES", title: "La Carihuela", kicker: "Pôr do sol + espetos",
+    text: "Antigo bairro de pescadores. Jantar de sardinhas no espeto, assadas em barcos com brasas, com os pés na areia enquanto o sol se põe.",
+    tags: ["sunset", "espetos", "pés na areia"], q: ["La Carihuela", "Espeto de sardinas", "espeto Málaga"], note: "" },
+  { kind: "drive", leg: "L4", from: "carihuela", to: "onlyyou", day: 2, time: "23:10", tz: "ES", title: "De volta a Málaga", kicker: "Táxi",
+    text: "Táxi de regresso ao centro para o último copo.", tags: ["≈ 15 km", "táxi"], q: ["Puerto de Málaga noche", "Muelle Uno"], note: "" },
   { kind: "stop", id: "onlyyou", day: 2, time: "23:30", tz: "ES", title: "Sonora · Only YOU", kicker: "Último copo",
-    text: "O rooftop do Only YOU foi relançado em 2026 como Sonora Sky & Bites, com música. Tem vista sobre o porto.",
-    tags: ["rooftop", "música", "porto"], q: ["Muelle Uno Málaga noche", "Puerto de Málaga noche"], note: "a vista" },
+    text: "O rooftop do Only YOU, relançado em 2026 como Sonora Sky & Bites, com música e vista sobre o porto.",
+    tags: ["rooftop", "música", "porto"], q: ["Muelle Uno Málaga noche", "Puerto de Málaga noche", "Málaga port night"], note: "a vista" },
   { kind: "stop", id: "malagueta", from: "me", day: 3, time: "09:30", tz: "ES", title: "Praia da Malagueta", kicker: "Último mergulho",
     text: "Banho e pequeno-almoço à beira-mar, a pé do hotel. Check-out até às 12:00.",
-    tags: ["praia", "manhã"], q: ["Playa de la Malagueta", "La Malagueta Málaga"], note: "" },
-  { kind: "drive", leg: "L5", from: "me", to: "lisboa", day: 3, time: "13:00", tz: "ES", title: "Málaga → Lisboa",
+    tags: ["praia", "manhã"], q: ["Playa de la Malagueta", "La Malagueta", "Málaga beach"], note: "" },
+  { kind: "drive", leg: "L5", from: "me", to: "lisboa", day: 3, time: "13:00", tz: "ES", title: "Málaga → Lisboa", kicker: "Regresso",
     text: "Saída às 13:00 de Espanha (12:00 em Portugal). São cerca de 6h30 de estrada mais uma paragem para almoçar perto de Sevilha. Chegada a Lisboa por volta das 19:00, hora de Portugal.",
-    tags: ["≈ 690 km", "6h30 + paragem", "chegada 19:00 PT"], q: ["Ponte 25 de Abril pôr do sol", "Ponte 25 de Abril"], note: "a chegada" },
-  { kind: "end", day: 4, time: "19:00", tz: "PT", title: "Portagem final", q: ["Ponte 25 de Abril Lisboa"], note: "" },
+    tags: ["≈ 690 km", "6h30 + paragem", "chegada 19:00 PT"], q: ["Ponte 25 de Abril pôr do sol", "Ponte 25 de Abril", "Lisboa pôr do sol"], note: "a chegada" },
+  { kind: "end", day: 4, time: "19:00", tz: "PT", title: "Quanto custa", q: ["Ponte 25 de Abril Lisboa", "Lisboa"], note: "" },
 ];
-const DAYS = ["SEX 25", "SÁB 26", "DOM 27", "SEG 28", "€ / PESSOA"];
+const DAYS = ["SEX 25", "SÁB 26", "DOM 27", "SEG 28", "€"];
+const DAYNAME = ["Sexta 25", "Sábado 26", "Domingo 27", "Segunda 28", "Segunda 28"];
 const BUDGET = [["Mercer Sevilla · 1 noite", 175], ["ME Málaga · 2 noites", 420], ["Carro · gasóleo, portagens, parque", 110],
-  ["Restaurantes", 380], ["Beach club · camas e consumo", 60], ["Copas e noite", 160], ["Spa · 1 tratamento", 90]];
+  ["Restaurantes", 340], ["Beach club · camas e consumo", 60], ["Copas e noite", 160], ["Spa · 1 tratamento", 90]];
 const eur = v => v.toLocaleString("pt-PT") + " €";
-
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const $ = id => document.getElementById(id);
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const wide = () => innerWidth >= 900;
 
-// ------------------------------------------------------------------ map
+// ---------------------------------------------------------------- map (fail-safe)
 let map = null;
+function noMap() { if (document.body.classList.contains("nomap")) return; document.body.classList.add("nomap"); const w = $("warn"); if (w) w.hidden = false; }
 window.addEventListener("error", e => { e.preventDefault(); noMap(); return true; });
-window.addEventListener("unhandledrejection", e => { e.preventDefault(); });
-function noMap() {
-  if (document.body.classList.contains("nomap")) return;
-  document.body.classList.add("nomap");
-  const w = document.getElementById("warn"); if (w) w.hidden = false;
-}
+window.addEventListener("unhandledrejection", e => e.preventDefault());
 function hasWebGL() { try { const c = document.createElement("canvas"); return !!(c.getContext("webgl2") || c.getContext("webgl")); } catch (e) { return false; } }
 try {
   if (!window.maplibregl || !hasWebGL()) throw new Error("no map");
   map = new maplibregl.Map({
-  container: "map",
-  attributionControl: false,
-  style: {
-    version: 8,
-    sources: {
-      sat: { type: "raster", tileSize: 256, maxzoom: 19,
-        tiles: ["https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"],
-        attribution: "Imagery © Esri, Maxar, Earthstar Geographics" },
-      roads: { type: "raster", tileSize: 256, maxzoom: 19,
-        tiles: ["https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}"] },
-      labels: { type: "raster", tileSize: 256, maxzoom: 19,
-        tiles: ["https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}"] },
-      dem: { type: "raster-dem", encoding: "terrarium", tileSize: 256, maxzoom: 14,
-        tiles: ["https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png"],
-        attribution: "Relevo: Mapzen/AWS Terrain Tiles" }
-    },
-    layers: [
-      { id: "sat", type: "raster", source: "sat", paint: { "raster-saturation": -0.05, "raster-contrast": 0.08 } },
-      { id: "roads", type: "raster", source: "roads", paint: { "raster-opacity": 0.35 } },
-      { id: "labels", type: "raster", source: "labels", paint: { "raster-opacity": 0.85 } }
-    ]
-  },
-  center: [-6.8, 37.6], zoom: 6.3, pitch: 30, bearing: 0, maxPitch: 75
-});
+    container: "map", attributionControl: false,
+    style: { version: 8,
+      sources: {
+        sat: { type: "raster", tileSize: 256, maxzoom: 19, tiles: ["https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"], attribution: "Imagery © Esri, Maxar, Earthstar Geographics" },
+        labels: { type: "raster", tileSize: 256, maxzoom: 19, tiles: ["https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}"] },
+        dem: { type: "raster-dem", encoding: "terrarium", tileSize: 256, maxzoom: 14, tiles: ["https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png"], attribution: "Relevo: AWS Terrain Tiles" }
+      },
+      layers: [
+        { id: "sat", type: "raster", source: "sat", paint: { "raster-saturation": 0.12, "raster-contrast": 0.06 } },
+        { id: "labels", type: "raster", source: "labels", paint: { "raster-opacity": 0.8 } }
+      ] },
+    center: [-7.2, 37.9], zoom: 6.4, pitch: 35, bearing: -10, maxPitch: 75
+  });
   map.addControl(new maplibregl.AttributionControl({ compact: true, customAttribution: "Rotas © OpenStreetMap / OSRM · Fotos: Wikimedia Commons" }));
   map.on("error", () => {});
 } catch (e) { map = null; noMap(); }
@@ -280,249 +284,240 @@ async function getRoute(leg, from, to) {
   if (ROUTES[leg]) return ROUTES[leg];
   const a = S[from], b = S[to];
   try {
-    const url = `https://router.project-osrm.org/route/v1/driving/${a[0]},${a[1]};${b[0]},${b[1]}?overview=full&geometries=geojson`;
     const ctrl = new AbortController(); setTimeout(() => ctrl.abort(), 6000);
-    const r = await fetch(url, { signal: ctrl.signal }); const j = await r.json();
-    if (j.routes && j.routes[0]) {
-      ROUTES[leg] = { coords: j.routes[0].geometry.coordinates, km: j.routes[0].distance / 1000 };
-      return ROUTES[leg];
-    }
+    const j = await (await fetch(`https://router.project-osrm.org/route/v1/driving/${a[0]},${a[1]};${b[0]},${b[1]}?overview=full&geometries=geojson`, { signal: ctrl.signal })).json();
+    if (j.routes && j.routes[0]) return (ROUTES[leg] = { coords: j.routes[0].geometry.coordinates, km: j.routes[0].distance / 1000 });
   } catch (e) {}
-  const c = FB[leg]; ROUTES[leg] = { coords: c, km: lineKm(c) };
-  return ROUTES[leg];
+  return (ROUTES[leg] = { coords: FB[leg], km: lineKm(FB[leg]) });
 }
-function hav(a, b) {
-  const R = 6371, r = Math.PI / 180, dLat = (b[1] - a[1]) * r, dLon = (b[0] - a[0]) * r;
-  const s = Math.sin(dLat / 2) ** 2 + Math.cos(a[1] * r) * Math.cos(b[1] * r) * Math.sin(dLon / 2) ** 2;
-  return 2 * R * Math.asin(Math.sqrt(s));
-}
+function hav(a, b) { const R = 6371, r = Math.PI / 180, dLat = (b[1] - a[1]) * r, dLon = (b[0] - a[0]) * r;
+  const s = Math.sin(dLat / 2) ** 2 + Math.cos(a[1] * r) * Math.cos(b[1] * r) * Math.sin(dLon / 2) ** 2; return 2 * R * Math.asin(Math.sqrt(s)); }
 function lineKm(c) { let d = 0; for (let i = 1; i < c.length; i++) d += hav(c[i - 1], c[i]); return d; }
-function cumul(c) { const out = [0]; for (let i = 1; i < c.length; i++) out.push(out[i - 1] + hav(c[i - 1], c[i])); return out; }
-function cut(c, cum, f) {
-  const tgt = cum[cum.length - 1] * f; const out = [c[0]];
-  for (let i = 1; i < c.length; i++) {
-    if (cum[i] <= tgt) out.push(c[i]);
-    else { const s = (tgt - cum[i - 1]) / ((cum[i] - cum[i - 1]) || 1); out.push([c[i - 1][0] + (c[i][0] - c[i - 1][0]) * s, c[i - 1][1] + (c[i][1] - c[i - 1][1]) * s]); break; }
-  }
-  return out;
-}
-function bearing(a, b) {
-  const r = Math.PI / 180, y = Math.sin((b[0] - a[0]) * r) * Math.cos(b[1] * r);
-  const x = Math.cos(a[1] * r) * Math.sin(b[1] * r) - Math.sin(a[1] * r) * Math.cos(b[1] * r) * Math.cos((b[0] - a[0]) * r);
-  return (Math.atan2(y, x) / r + 360) % 360;
-}
+function cumul(c) { const o = [0]; for (let i = 1; i < c.length; i++) o.push(o[i - 1] + hav(c[i - 1], c[i])); return o; }
+function cut(c, cum, f) { const t = cum[cum.length - 1] * f, o = [c[0]];
+  for (let i = 1; i < c.length; i++) { if (cum[i] <= t) o.push(c[i]); else { const s = (t - cum[i - 1]) / ((cum[i] - cum[i - 1]) || 1); o.push([c[i - 1][0] + (c[i][0] - c[i - 1][0]) * s, c[i - 1][1] + (c[i][1] - c[i - 1][1]) * s]); break; } }
+  return o; }
+function bearing(a, b) { const r = Math.PI / 180, y = Math.sin((b[0] - a[0]) * r) * Math.cos(b[1] * r);
+  const x = Math.cos(a[1] * r) * Math.sin(b[1] * r) - Math.sin(a[1] * r) * Math.cos(b[1] * r) * Math.cos((b[0] - a[0]) * r); return (Math.atan2(y, x) / r + 360) % 360; }
 const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
-// done route = list of finished lines + one live partial
 const done = []; let live = null;
-function pushRoute() {
-  const feats = done.map(c => ({ type: "Feature", geometry: { type: "LineString", coordinates: c } }));
-  if (live && live.length > 1) feats.push({ type: "Feature", geometry: { type: "LineString", coordinates: live } });
-  if (!map) return;
-  const src = map.getSource("done"); if (src) src.setData({ type: "FeatureCollection", features: feats });
-}
+function pushRoute() { if (!map) return; const src = map.getSource("done"); if (!src) return;
+  const f = done.map(c => ({ type: "Feature", geometry: { type: "LineString", coordinates: c } }));
+  if (live && live.length > 1) f.push({ type: "Feature", geometry: { type: "LineString", coordinates: live } });
+  src.setData({ type: "FeatureCollection", features: f }); }
 
-if (map) map.on("load", async () => {
+const markers = {};
+if (map) map.on("load", () => {
   try { map.setTerrain({ source: "dem", exaggeration: 1.4 }); } catch (e) {}
   map.addSource("done", { type: "geojson", data: { type: "FeatureCollection", features: [] } });
-  map.addLayer({ id: "done-case", type: "line", source: "done", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#131518", "line-width": 7, "line-opacity": .55 } });
-  map.addLayer({ id: "done-line", type: "line", source: "done", layout: { "line-cap": "butt", "line-join": "round" }, paint: { "line-color": "#ff9e1b", "line-width": 4, "line-dasharray": [2.2, 1.4] } });
-  // markers
+  map.addLayer({ id: "glow", type: "line", source: "done", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#fff3e0", "line-width": 9, "line-opacity": .55, "line-blur": 2 } });
+  map.addLayer({ id: "dash", type: "line", source: "done", layout: { "line-cap": "butt", "line-join": "round" }, paint: { "line-color": "#f26b38", "line-width": 4.5, "line-dasharray": [2, 1.3] } });
   const seen = {};
-  STEPS.forEach((s, i) => {
-    const id = s.kind === "stop" ? s.id : null; if (!id || seen[id]) return; seen[id] = true;
-    const el = document.createElement("button"); el.className = "mk"; el.type = "button";
-    el.textContent = String(i + 1).padStart(2, "0"); el.setAttribute("aria-label", s.title);
-    el.addEventListener("click", ev => { ev.stopPropagation(); go(i); });
-    new maplibregl.Marker({ element: el }).setLngLat(S[id]).addTo(map); markers[id] = el;
-  });
-  const h = document.createElement("div"); h.className = "mk home"; h.textContent = "PT";
-  new maplibregl.Marker({ element: h }).setLngLat(S.lisboa).addTo(map);
+  STEPS.forEach((s, i) => { if (s.kind !== "stop" || seen[s.id]) return; seen[s.id] = 1;
+    const el = document.createElement("button"); el.type = "button"; el.className = "mk"; el.textContent = String(i + 1).padStart(2, "0"); el.setAttribute("aria-label", s.title);
+    el.addEventListener("click", ev => { ev.stopPropagation(); setPlay(false); go(i); });
+    new maplibregl.Marker({ element: el }).setLngLat(S[s.id]).addTo(map); markers[s.id] = el; });
+  const h = document.createElement("div"); h.className = "mk home"; h.textContent = "PT"; new maplibregl.Marker({ element: h }).setLngLat(S.lisboa).addTo(map);
   ["L1", "L2", "L3", "L4", "L5"].forEach(l => { const s = STEPS.find(x => x.leg === l); getRoute(l, s.from, s.to); });
 });
-const markers = {};
 
-// ------------------------------------------------------------------ photos (Wikimedia Commons, looked up live)
-const PHOTO = {};
-async function commons(queries) {
-  const key = queries.join("|");
-  if (PHOTO[key] !== undefined) return PHOTO[key];
-  try { const c = localStorage.getItem("ea:" + key); if (c) return (PHOTO[key] = JSON.parse(c)); } catch (e) {}
+// ---------------------------------------------------------------- photos: several per place, from Wikimedia Commons
+const PH = {};
+const strip = h => { const d = document.createElement("div"); d.innerHTML = h || ""; return (d.textContent || "").trim(); };
+async function photos(queries) {
+  const key = queries.join("|"); if (PH[key]) return PH[key];
+  try { const c = localStorage.getItem("ea2:" + key); if (c) return (PH[key] = JSON.parse(c)); } catch (e) {}
+  const out = [], seen = new Set();
   for (const q of queries) {
+    if (out.length >= 4) break;
     try {
-      const u = "https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrnamespace=6&gsrlimit=10"
+      const u = "https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrnamespace=6&gsrlimit=12"
         + "&gsrsearch=" + encodeURIComponent(q + " filetype:bitmap") + "&prop=imageinfo&iiprop=url|size|extmetadata&iiurlwidth=1400";
       const j = await (await fetch(u)).json();
-      const pages = Object.values((j.query || {}).pages || {}).sort((a, b) => a.index - b.index);
-      const ok = pages.map(p => ({ p, ii: (p.imageinfo || [])[0] })).filter(x => x.ii && x.ii.thumburl && x.ii.width >= 900);
-      const pick = ok.find(x => x.ii.width > x.ii.height * 1.15) || ok[0];
-      if (pick) {
-        const m = pick.ii.extmetadata || {};
-        const strip = h => { const d = document.createElement("div"); d.innerHTML = h || ""; return (d.textContent || "").trim(); };
-        const res = { src: pick.ii.thumburl, page: pick.ii.descriptionurl, author: strip((m.Artist || {}).value).slice(0, 60) || "autor desconhecido",
-          lic: strip((m.LicenseShortName || {}).value) || "ver licença" };
-        PHOTO[key] = res; try { localStorage.setItem("ea:" + key, JSON.stringify(res)); } catch (e) {}
-        return res;
-      }
+      Object.values((j.query || {}).pages || {}).sort((a, b) => a.index - b.index).forEach(p => {
+        const ii = (p.imageinfo || [])[0]; if (!ii || !ii.thumburl || out.length >= 4 || seen.has(p.title)) return;
+        if (ii.width < 1000 || ii.width < ii.height * 1.2) return;
+        const m = ii.extmetadata || {}; seen.add(p.title);
+        out.push({ src: ii.thumburl, page: ii.descriptionurl, author: strip((m.Artist || {}).value).slice(0, 50) || "autor desconhecido", lic: strip((m.LicenseShortName || {}).value) || "ver licença" });
+      });
     } catch (e) {}
   }
-  return (PHOTO[key] = null);
+  PH[key] = out; if (out.length) try { localStorage.setItem("ea2:" + key, JSON.stringify(out)); } catch (e) {}
+  return out;
 }
-let photoToken = 0;
-async function showPhoto(s) {
-  const tok = ++photoToken, img = $("img");
-  img.classList.remove("on"); $("credit").textContent = ""; $("fallback").textContent = s.title;
-  $("note").hidden = !s.note; $("note").textContent = s.note ? "foto: " + s.note : "";
-  const p = await commons(s.q || []);
-  if (tok !== photoToken) return;
-  if (!p) { $("credit").textContent = "Sem foto disponível de momento"; return; }
-  img.onload = () => { if (tok === photoToken) { void img.offsetWidth; img.classList.add("on"); } };
-  img.alt = s.title; img.src = p.src;
-  $("credit").innerHTML = "";
-  const a = document.createElement("a"); a.href = p.page; a.target = "_blank"; a.rel = "noopener";
-  a.textContent = `Foto: ${p.author} · ${p.lic} · Wikimedia Commons`; $("credit").appendChild(a);
+const gal = { list: [], i: 0, timer: null, token: 0 };
+function galShow(k) {
+  const imgs = $("gallery").querySelectorAll("img"); if (!imgs.length) return;
+  gal.i = (k + imgs.length) % imgs.length;
+  imgs.forEach((im, n) => im.classList.toggle("on", n === gal.i));
+  $("dots").querySelectorAll("button").forEach((d, n) => d.classList.toggle("on", n === gal.i));
+  const p = gal.list[gal.i]; $("credit").innerHTML = "";
+  if (p) { const a = document.createElement("a"); a.href = p.page; a.target = "_blank"; a.rel = "noopener"; a.textContent = `Foto: ${p.author} · ${p.lic} · Wikimedia Commons`; $("credit").appendChild(a); }
 }
-
-// ------------------------------------------------------------------ steps
-let idx = -1, playing = false, timer = null, anim = null, kmBase = 0;
-const kmAt = [];   // odometer value at end of each step
-function stepFrom(i) {
-  const s = STEPS[i]; if (s.kind === "drive") return S[s.from];
-  if (s.from) return S[s.from];
-  for (let k = i - 1; k >= 0; k--) { const p = STEPS[k]; if (p.kind === "stop") return S[p.id]; if (p.kind === "drive") return S[p.to]; }
-  return S.lisboa;
-}
-function setOdo(v) { $("odo").textContent = String(Math.round(v)).padStart(4, "0"); }
-function renderDays(day) {
-  const n = $("days"); n.innerHTML = "";
-  DAYS.forEach((d, i) => {
-    const b = document.createElement("button"); b.type = "button"; b.textContent = d;
-    b.setAttribute("aria-current", i === day ? "true" : "false");
-    b.addEventListener("click", () => go(STEPS.findIndex(s => s.day === i)));
-    n.appendChild(b);
+function galAuto() { clearInterval(gal.timer); if (!reduce && gal.list.length > 1) gal.timer = setInterval(() => galShow(gal.i + 1), 3500); }
+async function loadGallery(s) {
+  const tok = ++gal.token, g = $("gallery");
+  g.querySelectorAll("img").forEach(n => n.remove()); $("dots").innerHTML = ""; $("credit").textContent = ""; clearInterval(gal.timer);
+  $("empty").textContent = s.title; $("note").hidden = !s.note; $("note").textContent = s.note ? "foto: " + s.note : "";
+  $("gPrev").hidden = $("gNext").hidden = true;
+  const list = await photos(s.q || []); if (tok !== gal.token) return;
+  gal.list = list; gal.i = 0;
+  if (!list.length) { $("credit").textContent = "Sem fotos disponíveis de momento"; return; }
+  list.forEach((p, n) => {
+    const im = new Image(); im.alt = `${s.title}, foto ${n + 1}`; im.src = p.src; im.decoding = "async"; g.insertBefore(im, $("time"));
+    const d = document.createElement("button"); d.type = "button"; d.setAttribute("aria-label", `Foto ${n + 1}`); d.addEventListener("click", () => { galShow(n); galAuto(); }); $("dots").appendChild(d);
   });
+  $("gPrev").hidden = $("gNext").hidden = list.length < 2;
+  galShow(0); if (!$("card").classList.contains("hide")) galAuto();
 }
-function renderCard(i) {
-  const s = STEPS[i]; const b = $("body");
-  $("exitT").textContent = s.time; $("exitZ").textContent = s.tz === "PT" ? "PT" : "ES";
-  $("clockDay").textContent = DAYS[Math.min(s.day, 3)]; $("clock").textContent = s.time; $("tz").textContent = s.tz;
-  $("count").textContent = String(i + 1).padStart(2, "0") + " / " + STEPS.length;
-  const dayName = ["Sexta 25", "Sábado 26", "Domingo 27", "Segunda 28", "Segunda 28"][s.day];
+$("gPrev").addEventListener("click", () => { galShow(gal.i - 1); galAuto(); });
+$("gNext").addEventListener("click", () => { galShow(gal.i + 1); galAuto(); });
+let tx = null;
+$("gallery").addEventListener("touchstart", e => { tx = e.touches[0].clientX; }, { passive: true });
+$("gallery").addEventListener("touchend", e => { if (tx === null) return; const dx = e.changedTouches[0].clientX - tx; if (Math.abs(dx) > 40) { galShow(gal.i + (dx < 0 ? 1 : -1)); galAuto(); } tx = null; });
+
+// ---------------------------------------------------------------- UI
+function setOdo(v) { $("odo").textContent = String(Math.round(v)).padStart(4, "0"); }
+function renderDays(day) { const n = $("days"); n.innerHTML = "";
+  DAYS.forEach((d, i) => { const b = document.createElement("button"); b.type = "button"; b.textContent = d; b.setAttribute("aria-current", i === day ? "true" : "false");
+    b.addEventListener("click", () => { setPlay(false); go(STEPS.findIndex(s => s.day === i)); }); n.appendChild(b); }); }
+function setClock(s) { $("clockDay").textContent = DAYS[Math.min(s.day, 3)]; $("clock").textContent = s.time; $("tz").textContent = s.tz; }
+function fillCard(i) {
+  const s = STEPS[i], b = $("body");
+  $("time").innerHTML = `${s.time}<small>${s.tz}</small>`;
+  $("count").textContent = String(i + 1).padStart(2, "0") + "/" + STEPS.length;
   if (s.kind === "end") {
     const tot = BUDGET.reduce((a, x) => a + x[1], 0);
-    b.innerHTML = `<div class="kicker">Segunda 28 · 19:00 em Lisboa</div><h2>Portagem final</h2>
-      <p>Estimativa por pessoa, com 2 pessoas por quarto e 3 por carro. Os preços de junho de 2027 ainda não estão publicados.</p>
+    b.innerHTML = `<div class="kick">Segunda 28 · 19:00 em Lisboa</div><h2>Quanto custa, por pessoa</h2>
+      <p>Estimativa com 2 pessoas por quarto e 3 por carro. Os preços de junho de 2027 ainda não estão publicados.</p>
       <div class="ledger">${BUDGET.map(([l, v]) => `<div><span>${l}</span><b>${eur(v)}</b></div>`).join("")}</div>
-      <div class="total"><span>Total por pessoa</span><strong>≈ ${eur(tot)}</strong></div>
-      <p class="small" style="margin-top:6px">Intervalo realista: 1.250 – 1.600 €. Os hotéis são o que mais pode variar.</p>
-      <div class="kicker" style="margin-top:12px">Reservar já</div>
-      <ul class="todo"><li>Mercer Sevilla (sexta) e ME Málaga (sábado e domingo)</li><li>Kaleja, sábado às 20:30</li><li>Eterno, sexta às 22:30</li><li>Camas na La Palapa, domingo</li></ul>`;
+      <div class="total"><span>Total</span><strong>≈ ${eur(tot)}</strong></div>
+      <p class="small" style="margin-top:6px">Intervalo realista: 1.200 – 1.550 €. Os hotéis são o que mais pode variar.</p>
+      <div class="kick" style="margin-top:10px">Reservar já</div>
+      <ul class="todo"><li>Mercer Sevilla (sexta) e ME Málaga (sábado e domingo)</li><li>Camas na La Palapa, domingo</li><li>Reservado na Sala Gold, sábado</li></ul>`;
   } else {
-    b.innerHTML = `<div class="kicker">${dayName} · ${s.kicker || "Estrada"}</div><h2>${s.title}</h2><p>${s.text}</p>
+    b.innerHTML = `<div class="kick">${DAYNAME[s.day]} · ${s.kicker}</div><h2>${s.title}</h2><p>${s.text}</p>
       <div class="tags">${(s.tags || []).map(t => `<span>${t}</span>`).join("")}</div>`;
   }
-  renderDays(s.day);
-  Object.values(markers).forEach(m => m.classList.remove("on"));
-  if (s.kind === "stop" && markers[s.id]) markers[s.id].classList.add("on");
-  showPhoto(s);
+  loadGallery(s);
+}
+function cardPad(on) {
+  if (!map) return;
+  const c = $("card");
+  const pad = on ? (wide() ? { right: c.offsetWidth + 30, bottom: 0, top: 60, left: 0 } : { bottom: c.offsetHeight + 10, top: 100, right: 0, left: 0 }) : { top: 0, bottom: 0, left: 0, right: 0 };
+  map.easeTo({ padding: pad, duration: reduce ? 0 : 900 });
+}
+function showCard() { $("card").classList.remove("hide"); $("ticker").classList.add("hide"); galAuto(); requestAnimationFrame(() => cardPad(true)); }
+function hideCard() { $("card").classList.add("hide"); clearInterval(gal.timer); $("ticker").classList.remove("hide"); }
+function setTicker(s, flying) {
+  $("tickerTo").innerHTML = `<em>${s.time} ${s.tz}</em>${s.kind === "drive" ? s.title : "→ " + s.title}`;
+  $("tCard").hidden = flying;
 }
 
+// ---------------------------------------------------------------- the journey
+let idx = -1, playing = false, timer = null, anim = null, kmBase = 0, run = 0;
+function stepFrom(i) { const s = STEPS[i]; if (s.kind === "drive") return S[s.from]; if (s.from) return S[s.from];
+  for (let k = i - 1; k >= 0; k--) { const p = STEPS[k]; if (p.kind === "stop") return S[p.id]; if (p.kind === "drive") return S[p.to]; } return S.lisboa; }
 function stopAnim() { if (anim) { cancelAnimationFrame(anim); anim = null; } if (map) try { map.stop(); } catch (e) {} }
+function waitMove(D, my) { return new Promise(res => { if (!D) return res(); const t = setTimeout(res, D + 500); map.once("moveend", () => { clearTimeout(t); setTimeout(res, 150); }); }); }
 
-async function go(i, auto = false) {
+async function go(i) {
   if (i < 0 || i >= STEPS.length) return;
-  clearTimeout(timer); stopAnim();
-  // rebuild finished route up to step i
-  const prevIdx = idx; idx = i;
-  const card = $("card"); card.classList.add("out");
-  setTimeout(() => { renderCard(i); card.classList.remove("out"); }, reduce ? 0 : 250);
-  done.length = 0; live = null;
-  let km = 0;
-  for (let k = 0; k < i; k++) {
-    const s = STEPS[k];
-    if (s.kind === "drive") { const r = await getRoute(s.leg, s.from, s.to); done.push(r.coords); km += r.km; }
-    else if (s.kind === "stop") { const a = stepFrom(k), b = S[s.id]; if (hav(a, b) > 0.01) { done.push([a, b]); km += hav(a, b); } }
-  }
-  if (idx !== i) return;
-  pushRoute(); setOdo(km); kmBase = km;
+  const my = ++run; clearTimeout(timer); stopAnim(); idx = i;
   const s = STEPS[i];
-  let dur;
-  if (!map) {
+  hideCard(); setTicker(s, true); setClock(s); renderDays(s.day);
+  Object.values(markers).forEach(m => m.classList.remove("on"));
+  fillCard(i);   // photos start loading while the camera travels
+  done.length = 0; live = null; let km = 0;
+  for (let k = 0; k < i; k++) { const p = STEPS[k];
+    if (p.kind === "drive") { const r = await getRoute(p.leg, p.from, p.to); done.push(r.coords); km += r.km; }
+    else if (p.kind === "stop") { const a = stepFrom(k), b = S[p.id]; if (hav(a, b) > 0.01) { done.push([a, b]); km += hav(a, b); } } }
+  if (my !== run) return;
+  pushRoute(); setOdo(km); kmBase = km;
+  if (map) {
+    map.easeTo({ padding: { top: 0, bottom: 0, left: 0, right: 0 }, duration: 0 });
+    if (s.kind === "drive") await flyDrive(s, my);
+    else if (s.kind === "stop") await flyStop(s, i, my);
+    else await flyEnd(my);
+  } else {
     if (s.kind === "drive") { const r = await getRoute(s.leg, s.from, s.to); setOdo(km + r.km); }
     else if (s.kind === "stop") setOdo(km + hav(stepFrom(i), S[s.id]));
-    dur = 0;
-  } else if (s.kind === "drive") dur = await flyDrive(s, i);
-  else if (s.kind === "stop") dur = flyStop(s, i);
-  else { dur = 3000; map.flyTo({ center: [-6.6, 37.55], zoom: 6.2, pitch: 35, bearing: 0, duration: reduce ? 0 : 4500 }); }
-  if (playing && idx === i && i < STEPS.length - 1) timer = setTimeout(() => go(i + 1, true), dur + 6500);
+  }
+  if (my !== run) return;
+  if (s.kind === "stop" && markers[s.id]) markers[s.id].classList.add("on");
+  await sleep(map && !reduce ? 700 : 0);
+  if (my !== run) return;
+  showCard(); setTicker(s, false);
+  if (playing && i < STEPS.length - 1) timer = setTimeout(() => { if (my === run) go(i + 1); }, 9000);
   if (i === STEPS.length - 1) setPlay(false);
 }
 
-function flyStop(s, i) {
-  try { return flyStopInner(s, i); } catch (e) { return 0; }
-}
-function flyStopInner(s, i) {
-  const a = stepFrom(i), b = S[s.id];
-  const zoom = s.id === "palapa" || s.id === "horno" || s.id === "carihuela" ? 15.6 : 16.4;
-  const brg = (bearing(a, b) + 330) % 360;
-  const D = reduce ? 0 : 4200;
-  map.flyTo({ center: b, zoom, pitch: 62, bearing: hav(a, b) > 0.05 ? brg : map.getBearing() + 25, duration: D, curve: 1.6, essential: true });
-  const legKm = hav(a, b);
+async function flyStop(s, i, my) {
+  const a = stepFrom(i), b = S[s.id], legKm = hav(a, b);
+  const zoom = ["palapa", "horno", "carihuela"].includes(s.id) ? 16 : 16.6;
+  const D = reduce ? 0 : 6500;
+  if (legKm > 0.05 && !reduce) {
+    const mid = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+    map.easeTo({ center: mid, zoom: Math.min(15.2, Math.max(11.5, 16.4 - Math.log2(legKm + 0.4) - 0.6)), pitch: 45, duration: 1600 });
+    await waitMove(1600, my); if (my !== run) return;
+  }
+  map.flyTo({ center: b, zoom, pitch: 65, bearing: (bearing(a, b) + 340) % 360, duration: D, curve: 1.3, essential: true });
   if (legKm > 0.01) {
     const t0 = performance.now();
-    const step = now => {
-      const f = D ? Math.min(1, (now - t0) / D) : 1; const e = ease(f);
+    const step = now => { if (my !== run) return; const f = D ? Math.min(1, (now - t0) / D) : 1, e = ease(f);
       live = [a, [a[0] + (b[0] - a[0]) * e, a[1] + (b[1] - a[1]) * e]]; pushRoute(); setOdo(kmBase + legKm * e);
-      if (f < 1) anim = requestAnimationFrame(step); else { done.push([a, b]); live = null; pushRoute(); anim = null; }
-    };
+      if (f < 1) anim = requestAnimationFrame(step); else { done.push([a, b]); live = null; pushRoute(); anim = null; } };
     anim = requestAnimationFrame(step);
   }
-  return D;
+  await waitMove(D, my);
+  if (my !== run || reduce) return;
+  map.easeTo({ bearing: map.getBearing() + 18, duration: 2200, easing: t => t });   // slow orbit while it settles
+  await waitMove(2200, my);
 }
 
-async function flyDrive(s, i) {
-  const r = await getRoute(s.leg, s.from, s.to);
-  const c = r.coords, cum = cumul(c), total = cum[cum.length - 1];
-  const short = total < 40;
-  const D = reduce ? 0 : (short ? 6000 : 11000);
-  const z = short ? 12.8 : 8.6;
-  const start = c[0];
-  if (reduce) { done.push(c); pushRoute(); setOdo(kmBase + r.km); map.jumpTo({ center: c[c.length - 1], zoom: 9, pitch: 0 }); return 0; }
-  map.flyTo({ center: start, zoom: z, pitch: 58, bearing: bearing(c[0], c[Math.min(c.length - 1, 20)]), duration: 2200, essential: true });
-  return new Promise(res => {
-    setTimeout(() => {
-      if (idx !== i) return res(0);
-      const t0 = performance.now(); let brg = map.getBearing();
-      const step = now => {
-        if (idx !== i) return;
-        const f = Math.min(1, (now - t0) / D), e = ease(f);
-        const part = cut(c, cum, e); const head = part[part.length - 1];
-        const ahead = cut(c, cum, Math.min(1, e + (short ? 0.12 : 0.05)));
-        const tb = bearing(head, ahead[ahead.length - 1]);
-        let diff = ((tb - brg + 540) % 360) - 180; brg = (brg + diff * 0.04 + 360) % 360;
-        live = part; pushRoute(); setOdo(kmBase + r.km * e);
-        map.jumpTo({ center: head, zoom: z - Math.sin(e * Math.PI) * (short ? 0.6 : 1.0), pitch: 58, bearing: brg });
-        if (f < 1) anim = requestAnimationFrame(step);
-        else { done.push(c); live = null; pushRoute(); anim = null; res(D + 2200); }
-      };
-      anim = requestAnimationFrame(step);
-    }, 2200);
-  }).then(() => 0);  // the hold timer starts once the drive animation has ended
+async function flyDrive(s, my) {
+  const r = await getRoute(s.leg, s.from, s.to); if (my !== run) return;
+  const c = r.coords, cum = cumul(c), total = cum[cum.length - 1], short = total < 40;
+  if (reduce) { done.push(c); pushRoute(); setOdo(kmBase + r.km); map.jumpTo({ center: c[c.length - 1], zoom: 10 }); return; }
+  const D = short ? 9000 : 16000, z = short ? 13 : 8.8;
+  map.flyTo({ center: c[0], zoom: z, pitch: 60, bearing: bearing(c[0], c[Math.min(c.length - 1, 25)]), duration: 2600, essential: true });
+  await waitMove(2600, my); if (my !== run) return;
+  await new Promise(res => {
+    const t0 = performance.now(); let brg = map.getBearing();
+    const step = now => { if (my !== run) return res();
+      const f = Math.min(1, (now - t0) / D), e = ease(f), part = cut(c, cum, e), head = part[part.length - 1];
+      const ahead = cut(c, cum, Math.min(1, e + (short ? .12 : .05)));
+      const diff = ((bearing(head, ahead[ahead.length - 1]) - brg + 540) % 360) - 180; brg = (brg + diff * .035 + 360) % 360;
+      live = part; pushRoute(); setOdo(kmBase + r.km * e);
+      map.jumpTo({ center: head, zoom: z - Math.sin(e * Math.PI) * (short ? .5 : 1.1), pitch: 60, bearing: brg });
+      if (f < 1) anim = requestAnimationFrame(step); else { done.push(c); live = null; pushRoute(); anim = null; res(); } };
+    anim = requestAnimationFrame(step);
+  });
+  if (my !== run) return;
+  map.flyTo({ center: c[c.length - 1], zoom: short ? 14.5 : 12.5, pitch: 55, duration: 3000 });   // glide down over the arrival
+  await waitMove(3000, my);
 }
 
-function setPlay(on) { playing = on; $("play").textContent = on ? "❚❚ PAUSA" : "▶ PLAY"; if (!on) clearTimeout(timer); }
-$("play").addEventListener("click", () => { setPlay(!playing); if (playing) go(idx >= STEPS.length - 1 ? 0 : idx + 1); });
+async function flyEnd(my) {
+  if (reduce) { map.jumpTo({ center: [-6.7, 37.6], zoom: 6.3, pitch: 0, bearing: 0 }); return; }
+  map.flyTo({ center: [-6.7, 37.55], zoom: 6.3, pitch: 40, bearing: -8, duration: 5000 });
+  await waitMove(5000, my);
+}
+
+function setPlay(on) { playing = on; $("tPlay").textContent = on ? "❚❚" : "▶"; $("tPlay").setAttribute("aria-label", on ? "Pausa" : "Continuar"); if (!on) clearTimeout(timer); }
+$("tPlay").addEventListener("click", () => { if (playing) setPlay(false); else { setPlay(true); go(Math.min(STEPS.length - 1, idx + 1)); } });
+$("tCard").addEventListener("click", () => showCard());
+$("hideCard").addEventListener("click", () => { setPlay(false); hideCard(); cardPad(false); setTicker(STEPS[idx], false); });
 $("next").addEventListener("click", () => { setPlay(false); go(Math.min(STEPS.length - 1, idx + 1)); });
 $("prev").addEventListener("click", () => { setPlay(false); go(Math.max(0, idx - 1)); });
 document.addEventListener("keydown", e => {
   if (e.key === "ArrowRight") { setPlay(false); go(Math.min(STEPS.length - 1, idx + 1)); }
   if (e.key === "ArrowLeft") { setPlay(false); go(Math.max(0, idx - 1)); }
-  if (e.key === " ") { e.preventDefault(); $("play").click(); }
 });
 $("start").addEventListener("click", () => { $("intro").classList.add("gone"); setPlay(true); go(0); });
 renderDays(0);
-// warm photo cache in the background
-setTimeout(() => STEPS.forEach((s, k) => setTimeout(() => commons(s.q || []), k * 400)), 1500);
+setTimeout(() => STEPS.forEach((s, k) => setTimeout(() => photos(s.q || []), 600 + k * 350)), 1200);
 </script>
 </body>
 </html>
