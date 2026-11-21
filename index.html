@@ -84,7 +84,8 @@ button:focus-visible { outline: 3px solid var(--sun); outline-offset: 2px; }
 .foot .gmaps { font-size: 13px; color: var(--pacific); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; margin-right: auto; margin-left: 4px; }
 .gallery .close { position: absolute; right: 10px; top: 10px; width: 32px; height: 32px; border-radius: 50%; border: 0; background: rgba(43,30,22,.7); color: var(--sand); font-size: 14px; cursor: pointer; }
 .gallery .note { right: 50px !important; }
-.gallery .nofoto { position: absolute; inset: auto 0 34px 0; text-align: center; font-size: 13px; }
+.gallery .nofoto { position: absolute; inset: auto 0 40px 0; text-align: center; font-size: 14px; }
+.gallery .nofoto a { display: inline-block; box-shadow: 3px 3px 0 var(--rose); }
 .gallery .nofoto a { background: var(--sand); color: var(--ink); padding: 6px 12px; border-radius: 999px; text-decoration: none; font-weight: 700; }
 .foot .count { font-family: var(--mono); font-size: 12px; color: #8a7562; }
 
@@ -255,27 +256,27 @@ const STEPS = [
 const PQ = {
   "Partida de Lisboa": { slug: "lisboa", q: ["Ponte 25 de Abril"], must: ["25 de abril"], gq: "Ponte 25 de Abril Lisboa" },
   "Lisboa → Sevilha": { slug: "l1", q: ["Ponte Vasco da Gama"], must: ["vasco da gama"], gq: "Ponte Vasco da Gama" },
-  "Mercer Sevilla": { slug: "mercer", q: ["Torre del Oro", "Calle Castelar Sevilla"], must: ["torre del oro", "castelar"], gq: "Hotel Mercer Sevilla", note: "a 3 min a pé" },
-  "Terraza EME": { slug: "eme", q: ["Giralda", "Giralda Sevilla atardecer"], must: ["giralda"], gq: "Terraza EME Catedral Sevilla", note: "a vista do terraço" },
-  "La Azotea": { slug: "azotea", q: ["Plaza de San Lorenzo Sevilla", "San Lorenzo Sevilla"], must: ["san lorenzo"], gq: "La Azotea Conde de Barajas Sevilla", note: "a praça ao lado" },
+  "Mercer Sevilla": { slug: "mercer", q: [], must: [], gq: "Hotel Mercer Sevilla", venue: true },
+  "Terraza EME": { slug: "eme", q: [], must: [], gq: "Terraza EME Catedral Sevilla", venue: true },
+  "La Azotea": { slug: "azotea", q: [], must: [], gq: "La Azotea Conde de Barajas Sevilla", venue: true },
   "Alameda de Hércules": { slug: "alameda", q: ["Alameda de Hércules", "Alameda de Hercules"], must: ["alameda de h"], gq: "Alameda de Hércules Sevilla" },
   "Sevilha → Málaga": { slug: "l2", q: ["Peña de los Enamorados"], must: ["enamorados"], gq: "Peña de los Enamorados Antequera" },
   "Mercado de Atarazanas": { slug: "atarazanas", q: ["Mercado de Atarazanas", "Atarazanas Málaga"], must: ["atarazanas"], gq: "Mercado Central de Atarazanas Málaga" },
-  "ME Málaga": { slug: "me", q: ["Plaza de la Merced Málaga", "Plaza de la Merced"], must: ["merced"], gq: "ME Málaga hotel", note: "a praça do hotel" },
-  "Cañitas al Fresco": { slug: "canitas", q: ["Alcazaba de Málaga", "Alcazaba Málaga"], must: ["alcazaba"], gq: "Cañitas al Fresco ME Málaga rooftop", note: "a vista do rooftop" },
-  "Alita Soho": { slug: "alita", q: ["Soho Málaga", "Barrio de las Artes Málaga"], must: ["soho", "barrio de las artes"], gq: "Alita Soho Málaga", note: "o bairro" },
-  "Sala Gold": { slug: "gold", q: ["Plaza de Uncibay", "Uncibay Málaga"], must: ["uncibay"], gq: "Sala Gold Málaga", note: "a zona" },
+  "ME Málaga": { slug: "me", q: [], must: [], gq: "ME Málaga hotel", venue: true },
+  "Cañitas al Fresco": { slug: "canitas", q: [], must: [], gq: "Cañitas al Fresco ME Málaga rooftop", venue: true },
+  "Alita Soho": { slug: "alita", q: [], must: [], gq: "Alita Soho Málaga", venue: true },
+  "Sala Gold": { slug: "gold", q: [], must: [], gq: "Sala Gold Málaga", venue: true },
   "Málaga → Torremolinos": { slug: "l3", q: ["Torremolinos"], must: ["torremolinos"], gq: "Torremolinos" },
-  "La Palapa Beach Jazba": { slug: "palapa", q: ["Playa de Los Álamos", "Los Álamos Torremolinos"], must: ["alamos"], gq: "La Palapa Beach Jazba Torremolinos", note: "a praia" },
-  "Horno Beach": { slug: "horno", q: ["Playa del Bajondillo", "Bajondillo"], must: ["bajondillo"], gq: "Horno Beach Torremolinos", note: "a praia" },
+  "La Palapa Beach Jazba": { slug: "palapa", q: [], must: [], gq: "La Palapa Beach Jazba Torremolinos", venue: true },
+  "Horno Beach": { slug: "horno", q: [], must: [], gq: "Horno Beach Torremolinos", venue: true },
   "La Carihuela": { slug: "carihuela", q: ["La Carihuela", "Carihuela Torremolinos"], must: ["carihuela"], gq: "La Carihuela Torremolinos espetos" },
   "De volta a Málaga": { slug: "l4", q: ["Muelle Uno Málaga", "Muelle Uno"], must: ["muelle uno"], gq: "Muelle Uno Málaga" },
-  "Sonora · Only YOU": { slug: "onlyyou", q: ["Muelle Uno Málaga", "Puerto de Málaga"], must: ["muelle uno", "puerto de malaga"], gq: "Sonora Sky Only YOU Hotel Málaga", note: "a vista" },
+  "Sonora · Only YOU": { slug: "onlyyou", q: [], must: [], gq: "Sonora Sky Only YOU Hotel Málaga", venue: true },
   "Praia da Malagueta": { slug: "malagueta", q: ["Playa de la Malagueta", "La Malagueta"], must: ["malagueta"], gq: "Playa de la Malagueta" },
   "Málaga → Lisboa": { slug: "l5", q: ["Ponte 25 de Abril"], must: ["25 de abril"], gq: "Ponte 25 de Abril" },
   "Quanto custa": { slug: "fim", q: [], must: [] },
 };
-STEPS.forEach(s => { const x = PQ[s.title] || {}; s.slug = x.slug; s.q = x.q || []; s.must = x.must || []; s.gq = x.gq; s.note = x.note || ""; });
+STEPS.forEach(s => { const x = PQ[s.title] || {}; s.venue = !!x.venue; s.slug = x.slug; s.q = x.q || []; s.must = x.must || []; s.gq = x.gq; s.note = x.note || ""; });
 const DAYS = ["SEX 25", "SÁB 26", "DOM 27", "SEG 28", "€"];
 const DAYNAME = ["Sexta 25", "Sábado 26", "Domingo 27", "Segunda 28", "Segunda 28"];
 const BUDGET = [["Mercer Sevilla · 1 noite", 175], ["ME Málaga · 2 noites", 420], ["Carro · gasóleo, portagens, parque", 110],
@@ -424,7 +425,7 @@ async function loadGallery(s) {
   const list = s.kind === "end" ? [] : await photos(s); if (tok !== gal.token) return;
   gal.list = list; gal.i = 0;
   if (!list.length) {
-    if (s.gq) { const d = document.createElement("div"); d.className = "nofoto"; d.innerHTML = `<a href="${gmapsUrl(s.gq)}" target="_blank" rel="noopener">Ver fotos do sítio no Google Maps</a>`; g.appendChild(d); }
+    if (s.gq) { const d = document.createElement("div"); d.className = "nofoto"; d.innerHTML = `<a href="${gmapsUrl(s.gq)}" target="_blank" rel="noopener">Ver fotos ${s.venue ? "de " + s.title : "do sítio"} no Google Maps ↗</a>`; g.appendChild(d); }
     return;
   }
   list.forEach((p, n) => {
